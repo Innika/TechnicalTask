@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import jdk.jfr.Description;
 import models.User;
 import org.assertj.core.api.Assertions;
@@ -35,13 +36,15 @@ public class GetAllUsersVerifyDataTest extends BaseTest {
         verifyIfUsersCreatedAreTheSameAsProvided();
 
         verifyIfNameEmailIdAreUnique();
-    }
+    }s
 
+    @Step("Verify if users created are the same as provided")
     private void verifyIfUsersCreatedAreTheSameAsProvided() {
         Verifier.verifyIfUsersCreatedAreTheSameAsProvided(
                 expectedUsers, createdUsersApi, createdUsersUi);
     }
 
+    @Step("Verify if names, emails and IDs(for users gotten via API) are unique")
     private void verifyIfNameEmailIdAreUnique() {
         int usersCount = createdUsersApi.size();
         Assertions.assertThat(usersCount).isEqualTo(

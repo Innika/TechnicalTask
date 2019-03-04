@@ -1,6 +1,5 @@
 package models;
 
-import io.cucumber.datatable.dependency.com.fasterxml.jackson.databind.DeserializationFeature;
 import io.cucumber.datatable.dependency.com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.pro.shaded.org.apache.http.client.methods.HttpDelete;
 import io.cucumber.pro.shaded.org.apache.http.client.methods.HttpGet;
@@ -8,6 +7,7 @@ import io.cucumber.pro.shaded.org.apache.http.client.methods.HttpPost;
 import io.cucumber.pro.shaded.org.apache.http.client.methods.HttpUriRequest;
 import io.cucumber.pro.shaded.org.apache.http.client.utils.URIBuilder;
 import io.cucumber.pro.shaded.org.apache.http.impl.client.HttpClientBuilder;
+import io.qameta.allure.Step;
 import org.apache.commons.io.IOUtils;
 
 import java.net.URI;
@@ -28,6 +28,7 @@ public class UserService {
         return HttpClientBuilder.create().build().execute(request);
     }
 
+    @Step("Get users via API")
     public List<User> getAllUsers() throws Exception {
         String endpoint = "/user/all/json";
 
@@ -42,6 +43,11 @@ public class UserService {
         if (users.length == 0) {
             return null;
         }
+
+        for (var user : users) {
+            user.getUserCredentials();
+        }
+
         return Arrays.asList(users);
     }
 

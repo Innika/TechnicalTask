@@ -1,6 +1,7 @@
 package models;
 
-import java.nio.charset.Charset;
+import io.qameta.allure.Attachment;
+
 import java.util.Random;
 
 public class User {
@@ -10,7 +11,8 @@ public class User {
     public String confirmationPassword;
     public Long id;
 
-    public User(){}
+    public User() {
+    }
 
     public User(String name, String email, String password) {
         this.name = name;
@@ -38,6 +40,15 @@ public class User {
         return this;
     }
 
+    @Attachment(value = "User credentials")
+    public String getUserCredentials() {
+        String credentials = String.format("Name: %s\nEmail: %s\nPassword: %s\nConfirmation Password: %s\n",
+                this.name, this.email, this.password, this.confirmationPassword);
+        if (this.id != null)
+            credentials += String.format("ID: %s", this.id);
+        return credentials;
+    }
+
     public User setConfirmationPassword(String confirmationPassword) {
         this.confirmationPassword = confirmationPassword;
         return this;
@@ -48,10 +59,10 @@ public class User {
             String charset = "abcdefghijklmnopqrstuvwxyz1234567890-_.";
             String rndString = "";
             int size = new Random().nextInt(maxSize - minSize) + minSize;
-            for (int i = 0; i < size; i++){
+            for (int i = 0; i < size; i++) {
                 rndString += charset.toCharArray()[new Random().nextInt(charset.length() - 1)];
             }
-            return  rndString;
+            return rndString;
         }
 
         public static String getRandomName() {

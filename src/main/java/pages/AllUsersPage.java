@@ -16,6 +16,7 @@ public class AllUsersPage extends BasePage {
 
     public List<User> getAllUsers() throws Exception{
         wait.until(ExpectedConditions.visibilityOf(usersTable));
+        takeScreenshot();
         return new AllUsersTableController(usersTable).getUsers();
     }
 

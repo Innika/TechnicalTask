@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import jdk.jfr.Description;
 import models.User;
 import org.assertj.core.api.Assertions;
@@ -16,10 +17,18 @@ public class CreateUserUsingIncorrectDataTests extends BaseTest {
     @DisplayName("Create user with NOT unique NAME and unique email")
     public void createUserWithNotUniqueNameTest() throws Throwable {
         var user1 = newUserPage.createRandomUser();
+
+        createUserNotUniqueName(user1);
+
+        verifyOnlyUniqueUserWasCreated(user1);
+    }
+
+    @Step("Create user with NOT unique NAME and unique email")
+    private void createUserNotUniqueName(User uniqueUser) {
         var user2 = new User();
-        user2.setName(user1.name)
-                .setEmail(user1.email + "user2")
-                .setPassword(user1.password + "user2")
+        user2.setName(uniqueUser.name)
+                .setEmail(uniqueUser.email + "user2")
+                .setPassword(uniqueUser.password + "user2")
                 .setConfirmationPassword(user2.password);
 
         newUserPage.navigateTo()
@@ -28,19 +37,23 @@ public class CreateUserUsingIncorrectDataTests extends BaseTest {
                 ExpectedConditions.visibilityOf(newUserPage.error.nameError));
         Assertions.assertThat("Must be unique")
                 .isEqualTo(newUserPage.error.nameError.getText());
-
-        verifyOnlyUniqueUserWasCreated(user1);
     }
-
 
     @Test
     @DisplayName("Create user with NOT unique EMAIL and unique name")
     public void createUserWithNotUniqueEmailTest() throws Throwable {
         var user1 = newUserPage.createRandomUser();
+        createUserNotUniqueEmail(user1);
+
+        verifyOnlyUniqueUserWasCreated(user1);
+    }
+
+    @Step("Create user with NOT unique EMAIL and unique name")
+    private void createUserNotUniqueEmail(User uniqueUser) {
         var user2 = new User();
-        user2.setName(user1.name + "user2")
-                .setEmail(user1.email)
-                .setPassword(user1.password + "user2")
+        user2.setName(uniqueUser.name + "user2")
+                .setEmail(uniqueUser.email)
+                .setPassword(uniqueUser.password + "user2")
                 .setConfirmationPassword(user2.password);
 
         newUserPage.navigateTo()
@@ -50,11 +63,10 @@ public class CreateUserUsingIncorrectDataTests extends BaseTest {
 
         Assertions.assertThat("Must be unique")
                 .isEqualTo(newUserPage.error.emailError.getText());
-
-        verifyOnlyUniqueUserWasCreated(user1);
     }
 
-    private void verifyOnlyUniqueUserWasCreated(User user) throws Exception{
+    @Step("Verify that only unique user was created")
+    private void verifyOnlyUniqueUserWasCreated(User user) throws Exception {
         List<User> expectedUsers = new ArrayList<>();
         expectedUsers.add(user);
         newUserPage.goToAllUsers();
@@ -112,7 +124,8 @@ public class CreateUserUsingIncorrectDataTests extends BaseTest {
         verifyNoUserWasCreated();
     }
 
-    private void verifyNoUserWasCreated() throws Exception{
+    @Step("Verify no users were created")
+    private void verifyNoUserWasCreated() throws Exception {
         newUserPage.goToAllUsers();
         Verifier.verifyIfUsersCreatedAreTheSameAsProvided(
                 null, userService.getAllUsers(), allUsersPage.getAllUsers());

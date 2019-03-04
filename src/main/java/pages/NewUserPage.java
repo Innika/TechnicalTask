@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import models.User;
 import models.UserService;
 import org.openqa.selenium.WebDriver;
@@ -21,9 +22,11 @@ public class NewUserPage extends BasePage {
         error = new Error(driver);
     }
 
+    @Step("Navigate to 'New User' page")
     public NewUserPage navigateTo() {
         driver.get(url);
         wait.until(ExpectedConditions.visibilityOf(submitButton));
+        takeScreenshot();
         return this;
     }
 
@@ -43,14 +46,20 @@ public class NewUserPage extends BasePage {
         confirmationPasswordInput.sendKeys(confirmationPassword);
     }
 
+    @Step("Submit form")
     private void submitForm() {
+        takeScreenshot();
         submitButton.click();
+        takeScreenshot();
     }
 
+    @Step("Go to 'All users' page")
     public void goToAllUsers() {
         allUsersButton.click();
+        takeScreenshot();
     }
 
+    @Step("Create random count of random users via API")
     public List<User> createRandomUsers(int minUsersCount, int maxUsersCount) throws Exception {
         int count = new Random().nextInt(maxUsersCount - minUsersCount) + minUsersCount;
         List<User> users = new ArrayList<>();
@@ -61,6 +70,7 @@ public class NewUserPage extends BasePage {
         return users;
     }
 
+    @Step("Create a random user via UI")
     public User createRandomUser() {
         var user = new User(getRandomName(), getRandomEmail(), getRandomPassword());
         fulfilForm(user);
@@ -73,11 +83,15 @@ public class NewUserPage extends BasePage {
         return user;
     }
 
+    @Step("Fulfil form")
     public NewUserPage fulfilForm(User user) {
+        user.getUserCredentials();
+
         enterName(user.name);
         enterEmail(user.email);
         enterPassword(user.password);
         enterConfirmationPassword(user.confirmationPassword);
+
         submitForm();
         return this;
     }

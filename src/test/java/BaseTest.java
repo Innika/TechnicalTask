@@ -13,8 +13,6 @@ public class BaseTest {
     NewUserPage newUserPage;
     AllUsersPage allUsersPage;
 
-    //TODO implement allure reporting
-
     @BeforeEach
     public void setUp() throws Exception {
 
