@@ -1,3 +1,4 @@
+import models.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
@@ -6,9 +7,13 @@ import pages.AllUsersPage;
 import pages.NewUserPage;
 
 public class BaseTest {
+    public final String url = "http://85.93.17.135:9000";
     WebDriver driver;
+    UserService userService;
     NewUserPage newUserPage;
     AllUsersPage allUsersPage;
+
+    //TODO implement allure reporting
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -16,17 +21,18 @@ public class BaseTest {
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get("http://85.93.17.135:9000");
+        driver.get(url);
 
-        newUserPage = new NewUserPage(driver);
+        userService = new UserService(url);
+        newUserPage = new NewUserPage(driver, url, userService);
         allUsersPage = new AllUsersPage(driver);
 
-        //TODO: Delete users
+        userService.deleteAllUsers();
     }
 
     @AfterEach
     public void tearDown() throws Exception {
         driver.quit();
-        //TODO: Delete users
+        userService.deleteAllUsers();
     }
 }

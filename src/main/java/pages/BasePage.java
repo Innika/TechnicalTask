@@ -1,18 +1,31 @@
 package pages;
 
+import models.UserService;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class BasePage {
+class BasePage {
     private static final int TIMEOUT = 20;
 
-    public static WebDriver driver;
-    private static WebDriverWait wait;
+    public WebDriver driver;
+    public WebDriverWait wait;
+    String url;
+    UserService userService;
 
-    public BasePage(WebDriver driver) {
+    BasePage(WebDriver driver, String url, UserService userService) {
+        this.url = url;
+        this.userService = userService;
+        setUp(driver);
+    }
+
+    BasePage(WebDriver driver) {
+        setUp(driver);
+    }
+
+    private void setUp(WebDriver driver){
         this.driver = driver;
-        wait = new WebDriverWait(driver, TIMEOUT);
-        PageFactory.initElements(driver, this);
+        wait = new WebDriverWait(this.driver, TIMEOUT);
+        PageFactory.initElements(this.driver, this);
     }
 }

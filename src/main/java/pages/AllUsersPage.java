@@ -5,6 +5,7 @@ import models.User;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class AllUsersPage extends BasePage {
     }
 
     public List<User> getAllUsers() throws Exception{
+        wait.until(ExpectedConditions.visibilityOf(usersTable));
         return new AllUsersTableController(usersTable).getUsers();
     }
 

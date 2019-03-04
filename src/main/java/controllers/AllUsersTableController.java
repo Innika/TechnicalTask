@@ -26,6 +26,9 @@ public class AllUsersTableController {
                 .stream().map(p -> p.getText()).collect(Collectors.toList());
         var rows = tableElement.findElements(By.cssSelector("tbody tr"));
 
+        if (rows.size() == 1 && rows.get(0).getText().equals("No Users")){
+            return null;
+        }
 
         rows.forEach(row -> {
             String name = row.findElement(By.xpath(
