@@ -36,7 +36,7 @@ public class GetAllUsersVerifyDataTest extends BaseTest {
         verifyIfUsersCreatedAreTheSameAsProvided();
 
         verifyIfNameEmailIdAreUnique();
-    }s
+    }
 
     @Step("Verify if users created are the same as provided")
     private void verifyIfUsersCreatedAreTheSameAsProvided() {
